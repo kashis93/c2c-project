@@ -1,0 +1,638 @@
+{
+  "analysisMetadata": {
+    "date": "2026-04-08",
+    "frontendLocation": "c:/Users/Lenovo/Desktop/kashu aluverse/alunet93/src",
+    "backendLocation": "c:/Users/Lenovo/Desktop/kashu aluverse/backend/src",
+    "frontend": {
+      "framework": "React 18 + Vite",
+      "styling": "TailwindCSS + Radix UI",
+      "stateManagement": "React Context only",
+      "buildStatus": "FAILING"
+    },
+    "backend": {
+      "framework": "Node.js + Express 5.2.1",
+      "database": "MongoDB + Mongoose 9.1.4",
+      "realTime": "Socket.IO 4.8.3 (installed but unused)",
+      "auth": "JWT + Bearer tokens (needs improvement)"
+    }
+  },
+  "overallCompletion": {
+    "percentage": 47,
+    "rating": "INCOMPLETE - Core features missing",
+    "status": "Active Development Required"
+  },
+  "apiEndpoints": {
+    "total_expected": 58,
+    "implemented": 31,
+    "partial": 8,
+    "missing": 19,
+    "completionPercentage": 53.4
+  },
+  "features": {
+    "authentication": {
+      "name": "User Authentication",
+      "completionPercentage": 60,
+      "status": "PARTIAL",
+      "implemented": [
+        "✅ User signup with validation",
+        "✅ User login with JWT (but flawed)",
+        "✅ Admin login",
+        "✅ Role-based access control",
+        "✅ Profile completion requirement",
+        "✅ Token storage in localStorage (not ideal)"
+      ],
+      "missing": [
+        "❌ JWT token expiration",
+        "❌ Refresh token mechanism",
+        "❌ Password reset flow",
+        "❌ Email verification",
+        "❌ Google OAuth/SSO",
+        "❌ Two-factor authentication",
+        "❌ HttpOnly cookies"
+      ],
+      "frontendServices": ["AuthContext.jsx"],
+      "backendRoutes": ["/api/auth/signup", "/api/auth/login", "/api/auth/admin-login", "/api/auth/me"],
+      "models": ["User.js"],
+      "priority": "HIGH",
+      "effort": "4-6 hours"
+    },
+    "userManagement": {
+      "name": "User Profiles & Directory",
+      "completionPercentage": 55,
+      "status": "PARTIAL",
+      "implemented": [
+        "✅ Get user profile by ID",
+        "✅ Get current user profile",
+        "✅ Update user profile",
+        "✅ Toggle profile visibility",
+        "✅ AlumniCard component",
+        "✅ Directory listing"
+      ],
+      "missing": [
+        "❌ User photo upload integration",
+        "❌ Advanced profile fields (skills, bio, location, experience)",
+        "❌ Profile search/filter",
+        "❌ Profile completion wizard UI",
+        "❌ Alumni statistics/achievements on profile",
+        "❌ Profile views tracking"
+      ],
+      "frontendServices": ["ProfileModern.jsx", "AlumniCard.jsx"],
+      "backendRoutes": ["/api/users", "/api/users/:userId", "/api/users/me", "/api/users/profile", "/api/users/:userId/visibility"],
+      "models": ["User.js"],
+      "priority": "MEDIUM",
+      "effort": "8-10 hours"
+    },
+    "posts": {
+      "name": "Posts/Feed/Status Updates",
+      "completionPercentage": 15,
+      "status": "CRITICAL - NOT IMPLEMENTED",
+      "implemented": [
+        "✅ Frontend UI components (CreatePost, PostCard, FeedClean)",
+        "✅ Frontend services (postsAPI.js with function definitions)",
+        "✅ Frontend can track posts in useState"
+      ],
+      "missing": [
+        "❌ NO BACKEND ROUTE /api/posts",
+        "❌ No POST /api/posts (create)",
+        "❌ No GET /api/posts (list)",
+        "❌ No GET /api/posts/user/:id (user feed)",
+        "❌ No PUT /api/posts/:id (update)",
+        "❌ No DELETE /api/posts/:id (delete)",
+        "❌ No POST /api/posts/:id/like (like)",
+        "❌ No DELETE /api/posts/:id/like (unlike)",
+        "❌ No GET /api/posts/:id/likes (likes list)",
+        "❌ No POST /api/posts/:id/comments (comment)",
+        "❌ No GET /api/posts/:id/comments (comments list)",
+        "❌ Post model schema needs creation",
+        "❌ Post permissions/authorization"
+      ],
+      "frontendServices": ["postsAPI.js - empty implementations"],
+      "backendRoutes": ["NONE - MISSING ENTIRELY"],
+      "models": ["MISSING - needs Post.js or use Blog.js"],
+      "priority": "CRITICAL",
+      "effort": "12-16 hours",
+      "notes": "Frontend is heavily dependent on this - used for achievements, feed, activity tracking"
+    },
+    "connections": {
+      "name": "Connection/Network Management",
+      "completionPercentage": 5,
+      "status": "CRITICAL - NOT IMPLEMENTED",
+      "implemented": [
+        "✅ Frontend UI for Connections.jsx",
+        "✅ Frontend services defined (socialService.js)"
+      ],
+      "missing": [
+        "❌ NO BACKEND ROUTE /api/connections",
+        "❌ No POST /api/connections/request (send request)",
+        "❌ No GET /api/connections/incoming (incoming requests)",
+        "❌ No GET /api/connections/outgoing (outgoing requests)",
+        "❌ No POST /api/connections/:id/accept (accept request)",
+        "❌ No DELETE /api/connections/:id/reject (reject request)",
+        "❌ No GET /api/connections (list connections)",
+        "❌ Connection request handling logic",
+        "❌ Connection notification system",
+        "❌ Block/unblock users (not started)"
+      ],
+      "frontendServices": ["socialService.js - connection functions"],
+      "backendRoutes": ["NONE - MISSING ENTIRELY"],
+      "models": ["Connection.js exists but not used by routes"],
+      "priority": "CRITICAL",
+      "effort": "10-12 hours",
+      "notes": "Connection model exists but no routes. Users can't add connections."
+    },
+    "messaging": {
+      "name": "Chat & Direct Messaging",
+      "completionPercentage": 5,
+      "status": "CRITICAL - NOT IMPLEMENTED",
+      "implemented": [
+        "✅ Chat UI components (ChatRoom.jsx, ChatSidebar.jsx)",
+        "✅ Frontend services for messaging (socialService.js)",
+        "✅ ChatRoom model schema"
+      ],
+      "missing": [
+        "❌ NO BACKEND ROUTE /api/chats",
+        "❌ No POST /api/chats/create (create/get chat room)",
+        "❌ No GET /api/chats/:id/messages (get messages)",
+        "❌ No POST /api/chats/:id/messages (send message)",
+        "❌ No GET /api/messages/incoming (incoming messages)",
+        "❌ Message delivery status tracking",
+        "❌ Message read receipts",
+        "❌ Typing indicators",
+        "❌ File sharing in chat",
+        "❌ Socket.IO integration for real-time chat"
+      ],
+      "frontendServices": ["ChatRoom.jsx, ChatSidebar.jsx, socialService.js"],
+      "backendRoutes": ["NONE - MISSING ENTIRELY"],
+      "models": ["ChatRoom.js, Message.js exist but unused"],
+      "priority": "CRITICAL",
+      "effort": "16-20 hours",
+      "notes": "Real-time messaging with Socket.IO needed"
+    },
+    "events": {
+      "name": "Events Management",
+      "completionPercentage": 50,
+      "status": "PARTIAL",
+      "implemented": [
+        "✅ Event model with schema",
+        "✅ GET /api/events (list all events)",
+        "✅ POST /api/events (create event)",
+        "✅ Events UI components (EventCard, EventDetails, EventsList)",
+        "✅ Event filtering by date range",
+        "✅ Frontend EventsService"
+      ],
+      "missing": [
+        "❌ GET /api/events/:id (get event details)",
+        "❌ PUT /api/events/:id (update event)",
+        "❌ DELETE /api/events/:id (delete event)",
+        "❌ POST /api/events/:id/rsvp (RSVP to event)",
+        "❌ POST /api/events/:id/save (save/bookmark event)",
+        "❌ GET /api/events/:id/attendees (attendees list)",
+        "❌ Event cancellation notifications",
+        "❌ Event reminder emails",
+        "❌ Calendar integration",
+        "❌ Export events (ICS format)"
+      ],
+      "frontendServices": ["eventsService.js"],
+      "backendRoutes": ["/api/events GET", "/api/events POST"],
+      "models": ["Event.js - complete schema"],
+      "priority": "HIGH",
+      "effort": "8-10 hours"
+    },
+    "blogs": {
+      "name": "Blogs/Articles",
+      "completionPercentage": 70,
+      "status": "GOOD",
+      "implemented": [
+        "✅ Blog model with schema",
+        "✅ GET /api/blogs (list blogs)",
+        "✅ POST /api/blogs (create blog with activity logging)",
+        "✅ Frontend blog UI",
+        "✅ Blog filtering by category/tags"
+      ],
+      "missing": [
+        "❌ GET /api/blogs/:id (get blog details)",
+        "❌ PUT /api/blogs/:id (update blog)",
+        "❌ DELETE /api/blogs/:id (delete blog)",
+        "❌ POST /api/blogs/:id/like (like blog)",
+        "❌ POST /api/blogs/:id/comments (comment on blog)",
+        "❌ Blog search",
+        "❌ Featured blogs",
+        "❌ Blog scheduling (publish date)"
+      ],
+      "frontendServices": ["Blog components"],
+      "backendRoutes": ["/api/blogs GET", "/api/blogs POST"],
+      "models": ["Blog.js - complete with comments"],
+      "priority": "MEDIUM",
+      "effort": "6-8 hours"
+    },
+    "qanda": {
+      "name": "Q&A System",
+      "completionPercentage": 65,
+      "status": "GOOD",
+      "implemented": [
+        "✅ Question model",
+        "✅ Answer model",
+        "✅ GET /api/qa (list questions)",
+        "✅ POST /api/qa (create question)",
+        "✅ POST /api/qa/:id/answers (post answer)",
+        "✅ Activity logging for answers",
+        "✅ Role-based permissions (students ask, alumni answer)"
+      ],
+      "missing": [
+        "❌ GET /api/qa/:id (get question details)",
+        "❌ PUT /api/qa/:id (update question)",
+        "❌ DELETE /api/qa/:id (delete question)",
+        "❌ Mark answer as helpful/best",
+        "❌ Question search",
+        "❌ Question filtering/sorting (hot, recent, unanswered)",
+        "❌ Email notifications for new answers",
+        "❌ Answer editing"
+      ],
+      "frontendServices": ["Q&A components"],
+      "backendRoutes": ["/api/qa GET", "/api/qa POST", "/api/qa/:id/answers POST"],
+      "models": ["Question.js, Answer.js"],
+      "priority": "MEDIUM",
+      "effort": "7-9 hours"
+    },
+    "challenges": {
+      "name": "Challenges/Competitions",
+      "completionPercentage": 40,
+      "status": "PARTIAL",
+      "implemented": [
+        "✅ Challenge model with schema",
+        "✅ Frontend UI (ChallengesList, ChallengeDetails, PostChallenge)",
+        "✅ Route file exists"
+      ],
+      "missing": [
+        "❌ Backend routes incomplete/not reviewed",
+        "❌ GET /api/challenges (list challenges)",
+        "❌ POST /api/challenges (create challenge)",
+        "❌ GET /api/challenges/:id (challenge details)",
+        "❌ POST /api/challenges/:id/submit (submit solution)",
+        "❌ GET /api/challenges/:id/submissions (view submissions)",
+        "❌ Challenge judging logic",
+        "❌ Leaderboard for challenges",
+        "❌ Challenge categories",
+        "❌ Submission code review/testing"
+      ],
+      "frontendServices": ["Challenge UI components"],
+      "backendRoutes": ["challenges.js - INCOMPLETE"],
+      "models": ["Challenge.js with submissions schema"],
+      "priority": "HIGH",
+      "effort": "10-14 hours"
+    },
+    "startups": {
+      "name": "Startup Showcase",
+      "completionPercentage": 45,
+      "status": "PARTIAL",
+      "implemented": [
+        "✅ Startup model with schema",
+        "✅ GET /api/startups (list startups)",
+        "✅ POST /api/startups (create startup)",
+        "✅ Frontend UI (StartupCard, StartupDetails)",
+        "✅ Like/comment functionality in model"
+      ],
+      "missing": [
+        "❌ GET /api/startups/:id (startup details)",
+        "❌ PUT /api/startups/:id (update startup)",
+        "❌ DELETE /api/startups/:id (delete startup)",
+        "❌ POST /api/startups/:id/like (like startup)",
+        "❌ POST /api/startups/:id/comments (comment on startup)",
+        "❌ Startup stage progression tracking",
+        "❌ Funding request/inquiry flow",
+        "❌ Investor tracking",
+        "❌ Team member management"
+      ],
+      "frontendServices": ["Startup components"],
+      "backendRoutes": ["/api/startups GET", "/api/startups POST"],
+      "models": ["Startup.js - complete with likes/comments"],
+      "priority": "MEDIUM",
+      "effort": "8-10 hours"
+    },
+    "internships": {
+      "name": "Internship Listings",
+      "completionPercentage": 30,
+      "status": "PARTIAL",
+      "implemented": [
+        "✅ Internship model present",
+        "✅ Route file exists"
+      ],
+      "missing": [
+        "❌ Routes not fully reviewed",
+        "❌ GET /api/internships (list)",
+        "❌ POST /api/internships (create)",
+        "❌ GET /api/internships/:id (details)",
+        "❌ PUT /api/internships/:id (update)",
+        "❌ DELETE /api/internships/:id",
+        "❌ POST /api/internships/:id/apply (apply for internship)",
+        "❌ Internship application tracking"
+      ],
+      "frontendServices": ["Internship components if any"],
+      "backendRoutes": ["internships.js - NOT REVIEWED"],
+      "models": ["Internship.js"],
+      "priority": "MEDIUM",
+      "effort": "8-10 hours"
+    },
+    "activity": {
+      "name": "Activity Feed & Tracking",
+      "completionPercentage": 75,
+      "status": "GOOD",
+      "implemented": [
+        "✅ Activity model and service",
+        "✅ GET /api/activity/feed (personalized feed by role)",
+        "✅ GET /api/activity/user/:userId (user activities)",
+        "✅ GET /api/activity/qa (Q&A activities)",
+        "✅ PUT /api/activity/:id/read (mark read)",
+        "✅ GET /api/activity/unread/count (unread count)",
+        "✅ Activity logging in posts, blogs, Q&A",
+        "✅ Frontend ActivityFeed component"
+      ],
+      "missing": [
+        "❌ Real-time activity updates (Socket.IO)",
+        "❌ Activity filtering by type",
+        "❌ Activity search",
+        "❌ Batch mark as read",
+        "❌ Activity preferences (what to follow)"
+      ],
+      "frontendServices": ["ActivityFeed.jsx, activity service"],
+      "backendRoutes": ["/api/activity/*"],
+      "models": ["Activity.js"],
+      "priority": "LOW",
+      "effort": "3-5 hours"
+    },
+    "notifications": {
+      "name": "Notification System",
+      "completionPercentage": 35,
+      "status": "PARTIAL",
+      "implemented": [
+        "✅ Notification model",
+        "✅ GET /api/notifications (list notifications)",
+        "✅ POST /api/notifications/mark-read (mark as read)",
+        "✅ Frontend NotificationBell component",
+        "✅ Notification types defined (post, internship, connection, system)"
+      ],
+      "missing": [
+        "❌ Real-time push notifications (Socket.IO)",
+        "❌ Email notifications",
+        "❌ Notification preferences per user",
+        "❌ Notification email digest",
+        "❌ In-app toast notifications for real-time events",
+        "❌ Browser push notifications",
+        "❌ Mobile push notifications",
+        "❌ Notification batching",
+        "❌ Notification unsubscribe flow"
+      ],
+      "frontendServices": ["NotificationBell.jsx"],
+      "backendRoutes": ["/api/notifications GET", "/api/notifications/mark-read POST"],
+      "models": ["Notification.js"],
+      "priority": "HIGH",
+      "effort": "12-16 hours (with email/Socket.IO)"
+    },
+    "search": {
+      "name": "Search Functionality",
+      "completionPercentage": 15,
+      "status": "MINIMAL",
+      "implemented": [
+        "✅ Frontend SearchBar component",
+        "✅ Search context setup started",
+        "✅ Backend route structure started"
+      ],
+      "missing": [
+        "❌ User search endpoint",
+        "❌ Post search endpoint",
+        "❌ Blog search endpoint",
+        "❌ Challenge search endpoint",
+        "❌ Startup search endpoint",
+        "❌ Q&A search endpoint",
+        "❌ Advanced search filters",
+        "❌ Search history tracking",
+        "❌ Search suggestions/autocomplete",
+        "❌ Full-text search indexing"
+      ],
+      "frontendServices": ["SearchBar.jsx"],
+      "backendRoutes": ["MINIMAL - needs implementation"],
+      "models": ["SearchHistory.js exists but not used"],
+      "priority": "LOW",
+      "effort": "10-12 hours"
+    },
+    "realTime": {
+      "name": "Real-Time Features",
+      "completionPercentage": 10,
+      "status": "NOT IMPLEMENTED",
+      "implemented": [
+        "✅ Socket.IO dependency installed",
+        "✅ RealTimeContext.jsx polling approach (bad)"
+      ],
+      "missing": [
+        "❌ Socket.IO server setup",
+        "❌ Socket.IO client connection",
+        "❌ Real-time post events (post:created, post:updated, post:deleted)",
+        "❌ Real-time chat/messaging",
+        "❌ Real-time notifications",
+        "❌ Real-time activity feed updates",
+        "❌ Presence tracking (who's online)",
+        "❌ Typing indicators",
+        "❌ Connection status indicators",
+        "❌ Real-time comment updates"
+      ],
+      "frontendServices": ["RealTimeContext.jsx - polling only"],
+      "backendRoutes": ["NO SOCKET.IO SETUP"],
+      "models": ["N/A"],
+      "priority": "HIGH",
+      "effort": "14-18 hours",
+      "notes": "Currently using inefficient 10-second polling for posts"
+    },
+    "email": {
+      "name": "Email System",
+      "completionPercentage": 0,
+      "status": "NOT IMPLEMENTED",
+      "implemented": [
+        "✅ Email service file exists (emailService.js)",
+        "✅ Email function structure defined"
+      ],
+      "missing": [
+        "❌ Email provider integration (SendGrid/SES/Resend)",
+        "❌ Welcome email",
+        "❌ Password reset email",
+        "❌ Email verification",
+        "❌ Event reminder emails",
+        "❌ Digest emails",
+        "❌ Connection request emails",
+        "❌ Email templates",
+        "❌ Email scheduling",
+        "❌ Email delivery tracking",
+        "❌ Bounce handling",
+        "❌ Unsubscribe management"
+      ],
+      "frontendServices": ["emailService.js - mocked"],
+      "backendRoutes": ["NONE"],
+      "models": ["N/A"],
+      "priority": "MEDIUM",
+      "effort": "8-12 hours",
+      "notes": "All functions are currently mocked - only log to console"
+    },
+    "recommendations": {
+      "name": "Recommendations & Suggestions",
+      "completionPercentage": 20,
+      "status": "MINIMAL",
+      "implemented": [
+        "✅ Route structure present",
+        "✅ Frontend suggests getSuggestions() call"
+      ],
+      "missing": [
+        "❌ Connection suggestions logic",
+        "❌ Content recommendations",
+        "❌ Event recommendations",
+        "❌ Startup recommendations",
+        "❌ Internship recommendations",
+        "❌ User matching algorithm",
+        "❌ Recommendation reasons (why recommend)",
+        "❌ Personalization based on user history"
+      ],
+      "frontendServices": ["socialService.js - getSuggestions()"],
+      "backendRoutes": ["/api/recommendations (partial)"],
+      "models": ["N/A"],
+      "priority": "LOW",
+      "effort": "10-14 hours"
+    }
+  },
+  "technicalDebt": {
+    "authentication": {
+      "issue": "Weak token management",
+      "impact": "Security risk",
+      "effort": "6-8 hours",
+      "solution": "Implement JWT with expiration, refresh tokens, httpOnly cookies"
+    },
+    "realTime": {
+      "issue": "No Socket.IO setup despite dependency",
+      "impact": "No real-time features, inefficient polling",
+      "effort": "14-18 hours",
+      "solution": "Setup Socket.IO server and client integration"
+    },
+    "email": {
+      "issue": "Email service completely mocked",
+      "impact": "No notifications, password resets don't work",
+      "effort": "8-12 hours",
+      "solution": "Integrate email provider (Resend/SendGrid)"
+    },
+    "database": {
+      "issue": "User model missing fields",
+      "impact": "Incomplete profile functionality",
+      "effort": "4-6 hours",
+      "solution": "Expand User schema with avatar, bio, location, skills, experience"
+    },
+    "frontend": {
+      "issue": "No state management library (Context only)",
+      "impact": "Difficult scaling and caching",
+      "effort": "10-14 hours",
+      "solution": "Add @tanstack/react-query or Redux for better caching"
+    },
+    "firestore": {
+      "issue": "Firebase still partially used alongside MongoDB",
+      "impact": "Double data source, confusion",
+      "effort": "8-10 hours",
+      "solution": "Remove Firestore completely, migrate to MongoDB"
+    },
+    "errorHandling": {
+      "issue": "Minimal error boundaries and error states",
+      "impact": "Poor UX when errors occur",
+      "effort": "6-8 hours",
+      "solution": "Add error boundaries, proper error messages, retry logic"
+    },
+    "testing": {
+      "issue": "No unit tests, no integration tests",
+      "impact": "High bug risk",
+      "effort": "20-30 hours",
+      "solution": "Setup Jest, React Testing Library, add comprehensive tests"
+    }
+  },
+  "buildStatus": {
+    "frontend": {
+      "status": "FAILING",
+      "lastCommand": "npm run build",
+      "exitCode": 1,
+      "possibleCauses": [
+        "Missing environment variables (VITE_API_URL, Firebase config)",
+        "Component errors or import issues",
+        "TypeScript/Vite configuration issues"
+      ],
+      "solutions": [
+        "Review Vite build output error messages",
+        "Check .env file configuration",
+        "Run 'npm install' to ensure dependencies",
+        "Clear node_modules and reinstall"
+      ]
+    },
+    "backend": {
+      "status": "PARTIAL - Database optional",
+      "note": "Can start without MongoDB but features limited",
+      "requiredEnvVars": ["MONGODB_URI", "ADMIN_EMAIL", "PORT"],
+      "optionalEnvVars": ["NODE_ENV", "JWT_SECRET"]
+    }
+  },
+  "deliverables": {
+    "apiEndpointsList": {
+      "format": "JSON/CSV",
+      "location": "API_ENDPOINTS_MAPPING.json",
+      "details": "58 total expected endpoints: 31 implemented, 8 partial, 19 missing"
+    },
+    "gapsAnalysis": {
+      "format": "Markdown table",
+      "location": "GAPS_ANALYSIS.md",
+      "details": "Missing critical features: Posts (0% done), Connections (5% done), Chat (5% done)"
+    },
+    "implementationRoadmap": {
+      "format": "JSON phases",
+      "details": "4 phases: CRITICAL (weeks 1-2), HIGH (weeks 3-4), MEDIUM (weeks 5-6), LOW (week 7+)"
+    },
+    "completenessMatrix": {
+      "format": "JSON by feature",
+      "location": "This file - see 'features' section",
+      "details": "47% overall, ranges from 0% (Email) to 80% (Blogs)"
+    }
+  },
+  "nextSteps": [
+    {
+      "priority": 1,
+      "task": "Create /api/posts route with full CRUD + likes + comments",
+      "estimatedHours": 12,
+      "blocking": true,
+      "reason": "Frontend heavily depends on this, 20% of app functionality"
+    },
+    {
+      "priority": 2,
+      "task": "Implement /api/connections routes (request, accept, reject, list)",
+      "estimatedHours": 10,
+      "blocking": true,
+      "reason": "Critical for network/social features"
+    },
+    {
+      "priority": 3,
+      "task": "Create /api/chats & /api/messages routes",
+      "estimatedHours": 16,
+      "blocking": true,
+      "reason": "Needed for messaging feature, requires Socket.IO"
+    },
+    {
+      "priority": 4,
+      "task": "Setup Socket.IO server for real-time updates",
+      "estimatedHours": 14,
+      "blocking": false,
+      "reason": "Needed for real-time chat, notifications, activity"
+    },
+    {
+      "priority": 5,
+      "task": "Fix authentication (JWT expiration, refresh tokens)",
+      "estimatedHours": 6,
+      "blocking": false,
+      "reason": "Security improvement, not critical for MVP"
+    },
+    {
+      "priority": 6,
+      "task": "Integrate email provider (Resend/SendGrid)",
+      "estimatedHours": 10,
+      "blocking": false,
+      "reason": "Needed for password reset, notifications"
+    }
+  ]
+}
