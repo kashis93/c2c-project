@@ -219,7 +219,22 @@ router.post('/signup', async (req, res) => {
         await user.save();
       }
       
-      // Generate and store temporary password
+      // Check if user already has a temporary password (from CSV import)
+      const hasExistingTempPassword = user.temporaryPassword && user.temporaryPasswordExpires && new Date(user.temporaryPasswordExpires) > new Date();
+      
+      if (hasExistingTempPassword) {
+        // User already has a valid temporary password from CSV import - don't generate new one
+        console.log('✅ [SIGNUP] User already has temporary password from CSV import:', email);
+        return res.status(200).json({
+          success: true,
+          message: 'Account found! You can verify with your existing temporary password.',
+          email,
+          hasExistingTempPassword: true,
+          instructions: 'Use the temporary password you received to verify your account.',
+        });
+      }
+      
+      // Generate and store temporary password (only if user doesn't have one)
       const { tempPassword } = await generateAndStoreTemporaryPassword(user._id);
       user = await User.findById(user._id);
 

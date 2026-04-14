@@ -1,0 +1,76 @@
+# Environment variables - IMPORTANT: Never commit sensitive data!
+.env
+.env.local
+.env.production
+.env.test
+.env.*.local
+
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build & dist
+dist/
+build/
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+lerna-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Uploads folder (user content)
+uploads/*
+!uploads/.gitkeep
+
+# IDE & Editor
+.vscode/
+.idea/
+.DS_Store
+*.sw?
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.iml
+*.sublime-*
+
+# Testing
+coverage/
+.nyc_output/
+.mocha_todo.json
+.jest_cache/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+
+# Cache
+.eslintcache
+.cache/
+
+# Misc
+debug-routes.js
+backend-startup.log

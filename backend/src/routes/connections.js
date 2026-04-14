@@ -151,6 +151,7 @@ router.get('/', requireAuth, async (req, res) => {
     if (!ensureDb(res)) return;
 
     const userId = req.user._id ? req.user._id.toString() : req.user.id;
+    console.log('📊 [Connections] Fetching connections for user:', userId);
 
     const connections = await Connection.find({
       $or: [
@@ -162,17 +163,39 @@ router.get('/', requireAuth, async (req, res) => {
       .populate('toUser', 'name email profilePhoto currentJobTitle currentCompany department batch currentLocation')
       .sort({ updatedAt: -1 });
 
+    console.log('📊 [Connections] Found', connections.length, 'total connections');
+
     // Transform to return connected user info with full details
     const connectedUsers = connections.map(conn => {
-      const otherUser = conn.fromUser._id.toString() === userId ? conn.toUser : conn.fromUser;
+      // Safely determine the other user
+      let otherUser = null;
+      const fromUserId = conn.fromUser ? (conn.fromUser._id ? conn.fromUser._id.toString() : conn.fromUser.toString()) : null;
+      
+      if (fromUserId === userId) {
+        otherUser = conn.toUser;
+      } else {
+        otherUser = conn.fromUser;
+      }
+      
+      // Handle null user case
+      if (!otherUser) {
+        console.warn('⚠️ [Connections] Null user found in connection:', conn._id);
+        return null;
+      }
+      
       return {
         _id: conn._id,
-        user: otherUser,
+        user: {
+          ...(otherUser.toObject ? otherUser.toObject() : otherUser),
+          profilePhoto: otherUser.profilePicture || otherUser.profilePhoto || otherUser.photoURL,
+          photoURL: otherUser.profilePicture || otherUser.profilePhoto || otherUser.photoURL,
+        },
         connectedAt: conn.updatedAt,
         status: conn.status
       };
-    });
+    }).filter(Boolean); // Remove null entries
 
+    console.log('📊 [Connections] Returning', connectedUsers.length, 'valid connections after filtering');
     res.json(connectedUsers);
   } catch (error) {
     console.error('Error fetching connections:', error);
@@ -259,6 +282,46 @@ router.delete('/:requestId/reject', requireAuth, async (req, res) => {
   } catch (error) {
     console.error('Error rejecting connection:', error);
     res.status(500).json({ message: 'Failed to reject connection' });
+  }
+});
+
+/**
+ * POST /api/connections/cancel/:requestId
+ * Cancel an outgoing connection request
+ */
+router.post('/cancel/:requestId', requireAuth, async (req, res) => {
+  try {
+    if (!ensureDb(res)) return;
+
+    const { requestId } = req.params;
+    const userId = req.user._id ? req.user._id.toString() : req.user.id;
+
+    if (!mongoose.Types.ObjectId.isValid(requestId)) {
+      return res.status(400).json({ message: 'Invalid request ID' });
+    }
+
+    const connection = await Connection.findById(requestId);
+
+    if (!connection) {
+      return res.status(404).json({ message: 'Connection request not found' });
+    }
+
+    // Check if the user is the one who sent the request (fromUser)
+    if (connection.fromUser.toString() !== userId) {
+      return res.status(403).json({ message: 'You can only cancel your own requests' });
+    }
+
+    if (connection.status !== 'pending') {
+      return res.status(400).json({ message: 'Can only cancel pending requests' });
+    }
+
+    await Connection.deleteOne({ _id: requestId });
+    console.log(`✅ [ConnectionCancel] User ${userId} cancelled request to ${connection.toUser}`);
+
+    res.json({ message: 'Connection request cancelled' });
+  } catch (error) {
+    console.error('Error cancelling connection request:', error);
+    res.status(500).json({ message: 'Failed to cancel connection request' });
   }
 });
 

@@ -30,7 +30,7 @@ router.post('/create', requireAuth, async (req, res) => {
     if (!ensureDb(res)) return;
 
     const { user2Id } = req.body;
-    const userId = req.user.id;
+    const userId = req.user._id ? req.user._id.toString() : req.user.id;
 
     if (!user2Id) {
       return res.status(400).json({ message: 'user2Id is required' });
@@ -67,6 +67,14 @@ router.post('/create', requireAuth, async (req, res) => {
       .populate('user2', 'name email department batch profilePhoto currentJobTitle currentCompany');
 
     if (existingChat) {
+      // Format with consistent photo fields, handle null users
+      const chatObj = existingChat.toObject ? existingChat.toObject() : existingChat;
+      
+      // Skip if either user is null
+      if (!chatObj.user1 || !chatObj.user2) {
+        return res.status(404).json({ message: 'One of the users in this chat no longer exists' });
+      }
+      
       return res.json({
         message: 'Chat already exists',
         chatId: existingChat._id,
@@ -95,7 +103,19 @@ router.post('/create', requireAuth, async (req, res) => {
     res.status(201).json({
       message: 'Chat created',
       chatId: newChat._id,
-      chat: newChat,
+      chat: {
+        ...newChat.toObject ? newChat.toObject() : newChat,
+        user1: newChat.user1 ? {
+          ...newChat.user1,
+          profilePhoto: newChat.user1.profilePicture || newChat.user1.profilePhoto || newChat.user1.photoURL,
+          photoURL: newChat.user1.profilePicture || newChat.user1.profilePhoto || newChat.user1.photoURL,
+        } : null,
+        user2: newChat.user2 ? {
+          ...newChat.user2,
+          profilePhoto: newChat.user2.profilePicture || newChat.user2.profilePhoto || newChat.user2.photoURL,
+          photoURL: newChat.user2.profilePicture || newChat.user2.profilePhoto || newChat.user2.photoURL,
+        } : null,
+      },
     });
   } catch (error) {
     console.error('Error creating chat:', error);
@@ -111,7 +131,8 @@ router.get('/', requireAuth, async (req, res) => {
   try {
     if (!ensureDb(res)) return;
 
-    const userId = req.user.id;
+    const userId = req.user._id ? req.user._id.toString() : req.user.id;
+    console.log('📊 [Chats] Fetching chats for user:', userId);
 
     const chats = await ChatRoom.find({
       $or: [
@@ -127,7 +148,35 @@ router.get('/', requireAuth, async (req, res) => {
       })
       .sort({ updatedAt: -1 });
 
-    res.json(chats);
+    console.log('📊 [Chats] Found', chats.length, 'total chats');
+
+    // Ensure all user objects have consistent photo field and handle null users
+    const formattedChats = chats.map(chat => {
+      const chatObj = chat.toObject ? chat.toObject() : chat;
+      
+      // Handle null users (deleted users)
+      if (!chatObj.user1 || !chatObj.user2) {
+        console.warn('⚠️ [Chats] Null user in chat', chatObj._id);
+        return null;
+      }
+      
+      return {
+        ...chatObj,
+        user1: {
+          ...chatObj.user1,
+          profilePhoto: chatObj.user1.profilePicture || chatObj.user1.profilePhoto || chatObj.user1.photoURL,
+          photoURL: chatObj.user1.profilePicture || chatObj.user1.profilePhoto || chatObj.user1.photoURL,
+        },
+        user2: {
+          ...chatObj.user2,
+          profilePhoto: chatObj.user2.profilePicture || chatObj.user2.profilePhoto || chatObj.user2.photoURL,
+          photoURL: chatObj.user2.profilePicture || chatObj.user2.profilePhoto || chatObj.user2.photoURL,
+        },
+      };
+    }).filter(Boolean); // Remove null entries
+
+    console.log('📊 [Chats] Returning', formattedChats.length, 'valid chats after filtering');
+    res.json(formattedChats);
   } catch (error) {
     console.error('Error fetching chats:', error);
     res.status(500).json({ message: 'Failed to fetch chats' });
@@ -143,7 +192,7 @@ router.get('/:chatId/messages', requireAuth, async (req, res) => {
     if (!ensureDb(res)) return;
 
     const { chatId } = req.params;
-    const userId = req.user.id;
+    const userId = req.user._id ? req.user._id.toString() : req.user.id;
 
     if (!mongoose.Types.ObjectId.isValid(chatId)) {
       // Return empty array for invalid chat IDs (better UX)
@@ -165,7 +214,27 @@ router.get('/:chatId/messages', requireAuth, async (req, res) => {
       .populate('senderId', 'name email profilePhoto')
       .sort({ createdAt: 1 });
 
-    res.json(messages);
+    // Format messages with consistent photo fields for sender, handle null senders
+    const formattedMessages = messages.map(msg => {
+      const msgObj = msg.toObject ? msg.toObject() : msg;
+      
+      // Handle null sender (deleted user)
+      if (!msgObj.senderId) {
+        console.warn('⚠️ [Messages] Null sender in message', msgObj._id);
+        return null;
+      }
+      
+      return {
+        ...msgObj,
+        senderId: {
+          ...msgObj.senderId,
+          profilePhoto: msgObj.senderId.profilePicture || msgObj.senderId.profilePhoto || msgObj.senderId.photoURL,
+          photoURL: msgObj.senderId.profilePicture || msgObj.senderId.profilePhoto || msgObj.senderId.photoURL,
+        },
+      };
+    }).filter(Boolean); // Remove null entries
+
+    res.json(formattedMessages);
   } catch (error) {
     console.error('Error fetching messages:', error);
     res.json([]); // Return empty array on error
@@ -182,7 +251,7 @@ router.post('/:chatId/messages', requireAuth, async (req, res) => {
 
     const { chatId } = req.params;
     const { text } = req.body;
-    const userId = req.user.id;
+    const userId = req.user._id ? req.user._id.toString() : req.user.id;
 
     if (!mongoose.Types.ObjectId.isValid(chatId)) {
       return res.status(400).json({ message: 'Invalid chat ID' });
