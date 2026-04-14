@@ -67,6 +67,8 @@ router.post('/create', requireAuth, async (req, res) => {
       .populate('user2', 'name email department batch profilePhoto currentJobTitle currentCompany');
 
     if (existingChat) {
+<<<<<<< Updated upstream
+=======
       // Format with consistent photo fields, handle null users
       const chatObj = existingChat.toObject ? existingChat.toObject() : existingChat;
       
@@ -75,6 +77,7 @@ router.post('/create', requireAuth, async (req, res) => {
         return res.status(404).json({ message: 'One of the users in this chat no longer exists' });
       }
       
+>>>>>>> Stashed changes
       return res.json({
         message: 'Chat already exists',
         chatId: existingChat._id,
@@ -103,6 +106,9 @@ router.post('/create', requireAuth, async (req, res) => {
     res.status(201).json({
       message: 'Chat created',
       chatId: newChat._id,
+<<<<<<< Updated upstream
+      chat: newChat,
+=======
       chat: {
         ...newChat.toObject ? newChat.toObject() : newChat,
         user1: newChat.user1 ? {
@@ -116,6 +122,7 @@ router.post('/create', requireAuth, async (req, res) => {
           photoURL: newChat.user2.profilePicture || newChat.user2.profilePhoto || newChat.user2.photoURL,
         } : null,
       },
+>>>>>>> Stashed changes
     });
   } catch (error) {
     console.error('Error creating chat:', error);
@@ -148,6 +155,9 @@ router.get('/', requireAuth, async (req, res) => {
       })
       .sort({ updatedAt: -1 });
 
+<<<<<<< Updated upstream
+    res.json(chats);
+=======
     console.log('📊 [Chats] Found', chats.length, 'total chats');
 
     // Ensure all user objects have consistent photo field and handle null users
@@ -177,6 +187,7 @@ router.get('/', requireAuth, async (req, res) => {
 
     console.log('📊 [Chats] Returning', formattedChats.length, 'valid chats after filtering');
     res.json(formattedChats);
+>>>>>>> Stashed changes
   } catch (error) {
     console.error('Error fetching chats:', error);
     res.status(500).json({ message: 'Failed to fetch chats' });
@@ -214,6 +225,9 @@ router.get('/:chatId/messages', requireAuth, async (req, res) => {
       .populate('senderId', 'name email profilePhoto')
       .sort({ createdAt: 1 });
 
+<<<<<<< Updated upstream
+    res.json(messages);
+=======
     // Format messages with consistent photo fields for sender, handle null senders
     const formattedMessages = messages.map(msg => {
       const msgObj = msg.toObject ? msg.toObject() : msg;
@@ -235,6 +249,7 @@ router.get('/:chatId/messages', requireAuth, async (req, res) => {
     }).filter(Boolean); // Remove null entries
 
     res.json(formattedMessages);
+>>>>>>> Stashed changes
   } catch (error) {
     console.error('Error fetching messages:', error);
     res.json([]); // Return empty array on error

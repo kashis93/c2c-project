@@ -185,11 +185,15 @@ router.get('/', requireAuth, async (req, res) => {
       
       return {
         _id: conn._id,
+<<<<<<< Updated upstream
+        user: otherUser,
+=======
         user: {
           ...(otherUser.toObject ? otherUser.toObject() : otherUser),
           profilePhoto: otherUser.profilePicture || otherUser.profilePhoto || otherUser.photoURL,
           photoURL: otherUser.profilePicture || otherUser.profilePhoto || otherUser.photoURL,
         },
+>>>>>>> Stashed changes
         connectedAt: conn.updatedAt,
         status: conn.status
       };
