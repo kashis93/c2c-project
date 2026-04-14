@@ -5,6 +5,84 @@ import { NotificationProvider } from '@/contexts/NotificationContext';
 import { RealTimeProvider } from '@/contexts/RealTimeContext';
 import { Toaster } from 'sonner';
 import Navbar from '@/components/Navbar';
+import './App.css';
+
+// Home page
+const HomePage = () => (
+  <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50">
+    <div className="max-w-7xl mx-auto px-4 py-20">
+      <h1 className="text-4xl font-bold text-gray-800 mb-6">Welcome to LDCE Alumni Network</h1>
+      <p className="text-xl text-gray-600">Connect, collaborate, and grow with alumni from LDCE</p>
+      <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h3 className="text-lg font-bold text-orange-600 mb-2">Directory</h3>
+          <p className="text-gray-600">Find and connect with alumni</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h3 className="text-lg font-bold text-orange-600 mb-2">Opportunities</h3>
+          <p className="text-gray-600">Explore job and startup opportunities</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h3 className="text-lg font-bold text-orange-600 mb-2">Events</h3>
+          <p className="text-gray-600">Join alumni meetups and webinars</p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// Placeholder for pages
+const PagePlaceholder = ({ title }) => (
+  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="text-center">
+      <h1 className="text-4xl font-bold text-gray-800 mb-4">{title}</h1>
+      <p className="text-gray-600">This page is coming soon...</p>
+    </div>
+  </div>
+);
+
+function App() {
+  return (
+    <AuthProvider>
+      <NotificationProvider>
+        <RealTimeProvider>
+          <Router>
+            <div className="flex flex-col min-h-screen bg-gray-50">
+              <Navbar />
+              
+              <main className="flex-grow">
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/directory" element={<PagePlaceholder title="Directory" />} />
+                  <Route path="/feed" element={<PagePlaceholder title="Feed" />} />
+                  <Route path="/opportunities" element={<PagePlaceholder title="Opportunities" />} />
+                  <Route path="/challenges" element={<PagePlaceholder title="Challenges" />} />
+                  <Route path="/events" element={<PagePlaceholder title="Events" />} />
+                  <Route path="/innovation" element={<PagePlaceholder title="Innovation" />} />
+                  <Route path="/notifications" element={<PagePlaceholder title="Notifications" />} />
+                  <Route path="/chat" element={<PagePlaceholder title="Chat" />} />
+                  <Route path="/profile/:id" element={<PagePlaceholder title="Profile" />} />
+                  <Route path="/login" element={<PagePlaceholder title="Login" />} />
+                  <Route path="*" element={<HomePage />} />
+                </Routes>
+              </main>
+            </div>
+            <Toaster position="top-right" richColors />
+          </Router>
+        </RealTimeProvider>
+      </NotificationProvider>
+    </AuthProvider>
+  );
+}
+
+export default App;
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { NotificationProvider } from '@/contexts/NotificationContext';
+import { RealTimeProvider } from '@/contexts/RealTimeContext';
+import { Toaster } from 'sonner';
+import Navbar from '@/components/Navbar';
 
 // Home page component
 const HomePage = () => (
